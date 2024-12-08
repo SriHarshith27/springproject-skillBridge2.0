@@ -1,0 +1,226 @@
+@charset "UTF-8";
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+    display: flex;
+    color: #E2E8F0;
+}
+
+.content-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 2rem auto;
+    margin-left:350px;
+    background: rgba(30, 41, 59, 0.7);
+    padding: 2.5rem;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+h1 {
+    color: #F1F5F9;
+    margin-bottom: 2rem;
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    animation: slideDown 0.6s ease forwards;
+}
+
+.user-table-container {
+    width: 100%;
+    opacity: 0;
+    animation: fadeIn 0.8s ease 0.4s forwards;
+}
+
+.user-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 1rem;
+}
+
+.user-table thead {
+    background: rgba(15, 23, 42, 0.6);
+}
+
+.user-table th, .user-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.user-table th {
+    color: #94A3B8;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.user-table tr {
+    background: rgba(30, 41, 59, 0.5);
+    transition: all 0.3s ease;
+}
+
+.user-table tr:hover {
+    transform: scale(1.02);
+    background: rgba(30, 41, 59, 0.7);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.view-btn, .delete-btn {
+    padding: 0.5rem 1rem;
+    margin: 0 0.25rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.view-btn {
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+    color: white;
+}
+
+.delete-btn {
+    background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+    color: white;
+}
+
+.view-btn:hover, .delete-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: rgba(30, 41, 59, 0.9);
+    padding: 2rem;
+    border-radius: 15px;
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-content h3 {
+    margin-bottom: 1rem;
+    color: #F1F5F9;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.modal-btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.confirm-btn {
+    background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+    color: white;
+}
+
+.cancel-btn {
+    background: linear-gradient(135deg, #64748B 0%, #475569 100%);
+    color: white;
+}
+
+.modal-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1E293B;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #3B82F6;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #2563EB;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .content-container {
+        padding: 1.5rem;
+        margin: 1rem;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    .user-table {
+        font-size: 0.9rem;
+    }
+
+    .user-table th, .user-table td {
+        padding: 0.5rem;
+    }
+
+    .view-btn, .delete-btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.9rem;
+    }
+}

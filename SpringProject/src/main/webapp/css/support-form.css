@@ -1,0 +1,240 @@
+@charset "UTF-8";
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    color: #E2E8F0;
+}
+
+.support-container {
+    width: 100%;
+    max-width: 600px;
+    background: rgba(30, 41, 59, 0.7);
+    padding: 2.5rem;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+h1 {
+    color: #F1F5F9;
+    margin-bottom: 2rem;
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeInUp 0.6s ease forwards;
+    position: relative;
+}
+
+.form-group:nth-child(1) { animation-delay: 0.2s; }
+.form-group:nth-child(2) { animation-delay: 0.4s; }
+.form-group:nth-child(3) { animation-delay: 0.6s; }
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #94A3B8;
+    font-weight: 500;
+    transform: translateY(20px);
+    animation: slideDown 0.5s ease forwards;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid #334155;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: rgba(15, 23, 42, 0.6);
+    color: #F1F5F9;
+}
+
+input:focus, textarea:focus {
+    border-color: #60A5FA;
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+    outline: none;
+    background: rgba(15, 23, 42, 0.8);
+}
+
+input::placeholder, textarea::placeholder {
+    color: #64748B;
+}
+
+textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+/* Submit Button Styling */
+button[type="submit"] {
+    width: 100%;
+    padding: 1rem;
+    background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0;
+    animation: fadeIn 0.6s ease 0.8s forwards;
+    position: relative;
+    overflow: hidden;
+}
+
+button[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
+}
+
+button[type="submit"]::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent
+    );
+    transition: 0.5s;
+}
+
+button[type="submit"]:hover::before {
+    left: 100%;
+}
+
+/* Success and Error Messages */
+.success-message, .error-message {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    text-align: center;
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+.success-message {
+    background-color: rgba(34, 197, 94, 0.2);
+    color: #22C55E;
+    border: 1px solid rgba(34, 197, 94, 0.4);
+}
+
+.error-message {
+    background-color: rgba(244, 63, 94, 0.2);
+    color: #F43F5E;
+    border: 1px solid rgba(244, 63, 94, 0.4);
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Glow effect on focus */
+.form-group:focus-within::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border-radius: 10px;
+    background: linear-gradient(45deg, #3B82F6, #2563EB);
+    z-index: -1;
+    animation: glow 1.5s linear infinite;
+    opacity: 0.5;
+}
+
+@keyframes glow {
+    0% { opacity: 0.5; }
+    50% { opacity: 0.3; }
+    100% { opacity: 0.5; }
+}
+
+/* Hover effect for inputs */
+.form-group:hover input,
+.form-group:hover textarea {
+    transform: translateX(5px);
+    transition: transform 0.3s ease;
+    background: rgba(15, 23, 42, 0.8);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .support-container {
+        padding: 1.5rem;
+        margin: 1rem;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+    }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1E293B;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #3B82F6;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #2563EB;
+}

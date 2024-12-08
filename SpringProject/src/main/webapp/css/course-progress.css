@@ -1,0 +1,362 @@
+:root {
+    --primary-bg: #0f172a;        
+    --secondary-bg: #1e293b;      
+    --card-bg: #1e293b;           
+    
+    --accent-color: #8b5cf6;      
+    --accent-hover: #7c3aed;     
+    --accent-light: rgba(139, 92, 246, 0.1);  
+    
+    --text-primary: #f8fafc;      
+    --text-secondary: #94a3b8;    
+    
+    --border-color: #334155;     
+    --border-hover: #475569;      
+    
+    --success-color: #10b981;    
+    --error-color: #ef4444;       
+    --warning-color: #f59e0b;     
+    
+    --overlay-light: rgba(15, 23, 42, 0.3);   
+    --overlay-heavy: rgba(15, 23, 42, 0.6);   
+    
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
+}
+
+
+.gradient-bg {
+    background: linear-gradient(to right, #1e293b, #0f172a);
+}
+
+.accent-gradient {
+    background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+}
+
+.active-bg {
+    background-color: #243557;  
+}
+
+.hover-bg {
+    background-color: #1f2937;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    color: #e2e8f0;
+    line-height: 1.6;
+    min-height: 100vh;
+    padding: 2rem;
+}
+/* Container styles */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    background: rgba(30, 41, 59, 0.4);
+    border-radius: 2rem;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-left: 330px;
+    
+}
+
+/* Navigation bar styles */
+.navbar {
+    background-color: var(--secondary-bg);
+    padding: 0.75rem 2rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    animation: navbarFadeIn 0.5s ease-out;
+}
+
+/* Section Navigation - Refined */
+.section-nav {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin: 1rem 0 2rem 0;
+    border-bottom: 1px solid var(--border-color);
+    padding: 0;
+}
+
+.section-nav button {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    padding: 1rem 1.5rem;
+    font-size: 0.95rem;
+    cursor: pointer;
+    position: relative;
+    transition: color var(--transition-speed) ease;
+}
+
+.section-nav button::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--accent-color);
+    transition: width var(--transition-speed) ease;
+}
+
+.section-nav button:hover {
+    color: var(--text-primary);
+}
+
+.section-nav button.active {
+    color: var(--text-primary);
+}
+
+.section-nav button.active::after {
+    width: 100%;
+}
+
+/* Sections Container - Improved Layout */
+.sections-container {
+    position: relative;
+    min-height: 400px;
+    margin-top: 2rem;
+}
+
+.section {
+    opacity: 0;
+    transform: translateX(20px);
+    position: absolute;
+    width: 100%;
+    transition: all var(--transition-speed) ease;
+    visibility: hidden;
+    padding: 0;
+}
+
+.section.active {
+    opacity: 1;
+    transform: translateX(0);
+    position: relative;
+    visibility: visible;
+    animation: sectionFadeIn 0.5s ease-out;
+}
+
+/* Video Sessions Section */
+#video-sessions {
+    display: grid;
+    gap: 2rem;
+}
+
+#video-sessions video {
+    width: 60%;
+    border-radius: 8px;
+    margin: 0.5rem 0;
+    background-color: var(--card-bg);
+    gap: 2rem;
+}
+
+/* Assignments Section - Refined */
+#assignments ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 1.5rem;
+}
+
+#assignments li {
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    padding: 1.5rem;
+    transition: transform 0.2s ease;
+    border: 1px solid var(--border-color);
+}
+
+#assignments h3 {
+    margin: 0 0 1rem 0;
+    font-size: 1.2rem;
+    color: var(--text-primary);
+}
+
+/* Assignment Buttons - Refined */
+.assignment-buttons {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.download-button, .submit-button {
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    border: none;
+    background-color: var(--accent-color);
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.download-button {
+    background-color: transparent;
+    border: 1px solid var(--accent-color);
+}
+
+.download-button:hover {
+    background-color: rgba(107, 70, 193, 0.1);
+}
+
+.submit-button:hover {
+    background-color: var(--accent-hover);
+}
+
+/* File Upload Container - Refined */
+.file-upload-container {
+    margin: 1rem 0;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.upload-label {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.file-input {
+    flex: 1;
+    padding: 0.5rem;
+    background-color: var(--primary-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+}
+
+.file-input:hover {
+    border-color: var(--accent-color);
+}
+
+/* Success and Error Messages */
+.success-message, .error-message {
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+}
+
+.success-message {
+    background-color: rgba(72, 187, 120, 0.1);
+    border: 1px solid var(--success-color);
+    color: var(--success-color);
+}
+
+.error-message {
+    background-color: rgba(245, 101, 101, 0.1);
+    border: 1px solid var(--error-color);
+    color: var(--error-color);
+}
+
+/* Page Title */
+.page-title {
+    font-size: 1.8rem;
+    margin: 1.5rem 0;
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+/* Grades Section */
+#grades {
+    padding: 1rem;
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+    
+    .section-nav {
+        gap: 1rem;
+    }
+    
+    .section-nav button {
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .assignment-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .download-button, .submit-button {
+        justify-content: center;
+    }
+    
+    .file-upload-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+
+/* Animations */
+@keyframes navbarFadeIn {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes sectionFadeIn {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+
+.de-enroll-form {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.de-enroll-button {
+    background-color: #f44336; /* Red */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.de-enroll-button:hover {
+    background-color: #d32f2f; /* Darker Red */
+}

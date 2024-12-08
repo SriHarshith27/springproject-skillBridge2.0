@@ -1,0 +1,216 @@
+@charset "UTF-8";
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+    display: flex;
+    align-items: top;
+    justify-content: top;
+    padding: 2rem;
+    color: #E2E8F0;
+}
+
+.container {
+    width: 100%;
+    max-width: 1000px;
+    margin-left:350px;
+    background: rgba(30, 41, 59, 0.7);
+    padding: 2.5rem;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+h1 {
+    color: #F1F5F9;
+    margin-bottom: 2rem;
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    animation: fadeInDown 0.6s ease forwards;
+}
+
+/* Success and Error Messages */
+.success-message, .error-message {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    border-radius: 8px;
+    opacity: 0;
+    animation: fadeIn 0.6s ease 0.2s forwards;
+}
+
+.success-message {
+    background-color: rgba(34, 197, 94, 0.2);
+    border: 1px solid #22C55E;
+    color: #22C55E;
+}
+
+.error-message {
+    background-color: rgba(239, 68, 68, 0.2);
+    border: 1px solid #EF4444;
+    color: #EF4444;
+}
+
+/* Courses Table */
+.courses-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 1rem;
+    opacity: 0;
+    animation: fadeIn 0.6s ease 0.4s forwards;
+}
+
+.courses-table thead {
+    background: rgba(15, 23, 42, 0.6);
+}
+
+.courses-table th, .courses-table td {
+    padding: 1rem;
+    text-align: left;
+    color: #E2E8F0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.courses-table th {
+    font-weight: 600;
+    color: #94A3B8;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.courses-table tr {
+    background: rgba(30, 41, 59, 0.5);
+    transition: all 0.3s ease;
+    opacity: 0;
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+.courses-table tr:hover {
+    background: rgba(30, 41, 59, 0.7);
+    transform: scale(1.02);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Delete Form */
+.courses-table form {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.courses-table input[type="text"] {
+    flex-grow: 1;
+    padding: 0.5rem;
+    border: 2px solid #334155;
+    border-radius: 8px;
+    background: rgba(15, 23, 42, 0.6);
+    color: #F1F5F9;
+    transition: all 0.3s ease;
+}
+
+.courses-table input[type="text"]:focus {
+    border-color: #60A5FA;
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+    outline: none;
+    background: rgba(15, 23, 42, 0.8);
+}
+
+.courses-table button {
+    padding: 0.5rem 1rem;
+    background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.courses-table button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(239, 68, 68, 0.4);
+}
+
+/* No Courses Message */
+p {
+    text-align: center;
+    color: #94A3B8;
+    font-style: italic;
+    opacity: 0;
+    animation: fadeIn 0.6s ease 0.6s forwards;
+}
+
+/* Animations */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1E293B;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #3B82F6;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #2563EB;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 1.5rem;
+        margin: 1rem;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    .courses-table {
+        font-size: 0.9rem;
+    }
+
+    .courses-table th, .courses-table td {
+        padding: 0.75rem;
+    }
+}

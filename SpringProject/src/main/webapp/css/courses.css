@@ -1,0 +1,262 @@
+/* Global Styles and Variables */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+:root {
+  --primary: #6c63ff;
+  --primary-hover: #5a52e0;
+  --background: #1a1a1a;
+  --surface: #2d2d2d;
+  --surface-hover: #383838;
+  --text: #ffffff;
+  --text-secondary: #b3b3b3;
+  --success: #4caf50;
+  --border-radius: 8px;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body {
+  min-height: 100vh;
+  background: radial-gradient(circle at top right, var(--bg-secondary), var(--bg-primary));
+  color: var(--text-primary);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 2rem;
+}
+
+/* Container Styling */
+.container {
+  width: calc(100% - 280px);
+  max-width: 1200px;
+  margin-left: 250px;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  padding: 2.5rem;
+}
+
+/* Heading Styles */
+h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  color: var(--text);
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+h1::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 4px;
+  background: var(--primary);
+  border-radius: 2px;
+  animation: slideIn 0.5s ease-out forwards;
+}
+
+/* Table Styles */
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: rgba(30, 41, 59, 0.6);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  animation: slideUp 0.5s ease-out;
+}
+
+th {
+  background: var(--accent);
+  color: var(--text);
+  font-weight: 600;
+  padding: 1.2rem 1rem;
+  text-align: left;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  letter-spacing: 0.05em;
+}
+
+td {
+  padding: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transition: var(--transition);
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+tr:hover td {
+  background: var(--surface-hover);
+}
+
+/* Link Styles */
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: var(--transition);
+  position: relative;
+}
+
+a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--primary);
+  transition: var(--transition);
+}
+
+a:hover::after {
+  width: 100%;
+}
+
+/* Button Styles */
+.enroll-btn, .view-enrolled-btn {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: var(--border-radius);
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  transform: translateY(0);
+  box-shadow: 0 4px 12px rgba(108, 99, 255, 0.2);
+}
+
+.enroll-btn:hover, .view-enrolled-btn:hover {
+  background: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(108, 99, 255, 0.3);
+}
+
+.view-enrolled-btn {
+  display: inline-block;
+  margin-bottom: 2rem;
+}
+
+/* Message Styles */
+p {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  text-align: center;
+  padding: 2rem;
+  background: var(--surface);
+  border-radius: var(--border-radius);
+  margin: 2rem 0;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    width: 0;
+  }
+  to {
+    width: 60px;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 1rem;
+  }
+  
+  table {
+    display: block;
+    overflow-x: auto;
+  }
+  
+  h1 {
+    font-size: 2rem;
+  }
+  
+  .enroll-btn, .view-enrolled-btn {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Loading State Animation */
+.loading {
+  position: relative;
+  opacity: 0.7;
+}
+
+.loading::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+
+.category-filter {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.category-filter label {
+    font-weight: bold;
+}
+
+.category-filter select {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+

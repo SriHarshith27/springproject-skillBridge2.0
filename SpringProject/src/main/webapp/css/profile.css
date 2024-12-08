@@ -1,0 +1,256 @@
+@charset "UTF-8";
+
+/* Base Styles */
+body {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  color: #e2e8f0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  margin: 0;
+  min-height: 100vh;
+}
+
+/* Profile Container */
+.profile-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  min-height: calc(100vh - 4rem);
+}
+
+/* Profile Card */
+.profile-card {
+  display: flex;
+  background: rgba(30, 41, 59, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.2),
+    0 0 80px rgba(78, 52, 212, 0.1);
+  overflow: hidden;
+  width: 1000px;
+  max-width: 90%;
+  transition: transform 0.3s ease;
+}
+
+.profile-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Profile Header */
+.profile-header {
+  background: linear-gradient(135deg, #4834d4 0%, #686de0 100%);
+  padding: 3rem 2rem;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.profile-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
+  z-index: 1;
+}
+
+/* Profile Picture */
+.profile-pic {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  border: 4px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  margin-bottom: 1.5rem;
+  transition: transform 0.3s ease;
+  position: relative;
+  z-index: 2;
+}
+
+.profile-pic:hover {
+  transform: scale(1.05);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Profile Name and Role */
+.profile-name {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #ffffff;
+  text-align: center;
+  letter-spacing: -0.5px;
+  position: relative;
+  z-index: 2;
+}
+
+.profile-role {
+  font-size: 1rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  margin-top: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Profile Information */
+.profile-info {
+  padding: 2.5rem;
+  flex-grow: 1;
+  background: rgba(17, 25, 40, 0.4);
+}
+
+.profile-info h3 {
+  margin: 0 0 1.5rem 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #ffffff;
+  position: relative;
+  padding-bottom: 0.75rem;
+}
+
+.profile-info h3::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 40px;
+  height: 3px;
+  background: linear-gradient(90deg, #4834d4, #686de0);
+  border-radius: 2px;
+}
+
+/* Information Sections */
+.info-section {
+  margin-bottom: 2rem;
+  padding: 1.25rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.info-section p {
+  margin: 0.75rem 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #e2e8f0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Social Icons */
+.social-icons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+  justify-content: center;
+}
+
+.social-icons a {
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.25rem;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.social-icons a:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+  .profile-card {
+    flex-direction: column;
+    width: 95%;
+  }
+
+  .profile-header {
+    width: 100%;
+    padding: 2rem;
+  }
+
+  .profile-info {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-container {
+    padding: 1rem;
+  }
+
+  .profile-pic {
+    width: 120px;
+    height: 120px;
+  }
+
+  .profile-name {
+    font-size: 1.5rem;
+  }
+
+  .info-section {
+    padding: 1rem;
+  }
+}
+
+
+/* Add these styles to your existing profile.css file */
+
+.edit-profile-btn {
+    margin-top: 1.5rem;
+    padding: 0.75rem 2rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.edit-profile-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.edit-profile-btn:active {
+    transform: translateY(0);
+}
+
+/* Optional: Add icon to button */
+.edit-profile-btn::before {
+    content: '✏️';
+    font-size: 1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .edit-profile-btn {
+        padding: 0.6rem 1.5rem;
+        font-size: 0.9rem;
+    }
+}

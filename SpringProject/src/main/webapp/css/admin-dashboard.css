@@ -1,0 +1,201 @@
+/* Global Reset and Base Styles */
+:root {
+    /* Color Palette */
+    --primary-bg-dark: #0f1729;
+    --secondary-bg-dark: #1a2544;
+    --accent-blue: #3a7ca5;
+    --glass-bg: rgba(58, 124, 165, 0.15);
+    --text-primary: #e6e6e6;
+    --text-secondary: #a0aec0;
+    --border-color: rgba(58, 124, 165, 0.3);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    transition: all 0.3s ease-in-out;
+}
+
+body {
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--primary-bg-dark);
+    color: var(--text-primary);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* Glass Morphism Container */
+.content {
+    background: var(--glass-bg);
+    backdrop-filter: blur(15px);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 2rem;
+    margin: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Dashboard Charts Layout */
+.dashboard-charts {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+/* Headings */
+h1, h2 {
+    color: var(--text-primary);
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+h1::after, h2::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(to right, var(--accent-blue), transparent);
+}
+
+/* Chart Container */
+.chart-container {
+    background: var(--secondary-bg-dark);
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    width: calc(50% - 0.5rem); /* Two charts per row */
+    max-width: 500px;
+    min-width: 300px;
+}
+
+.chart-container canvas {
+    max-height: 350px;
+    width: 100% !important;
+    height: auto !important;
+}
+
+/* Table Styling */
+.table-container {
+    background: var(--secondary-bg-dark);
+    border-radius: 12px;
+    padding: 1.5rem;
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    width: 100%;
+}
+
+#enrollmentTable {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+#enrollmentTable thead {
+    background: rgba(58, 124, 165, 0.2);
+}
+
+#enrollmentTable th, #enrollmentTable td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-secondary);
+}
+
+#enrollmentTable tr:hover {
+    background: rgba(58, 124, 165, 0.1);
+}
+
+/* Animation Keyframes */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Animated Elements */
+.content {
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.chart-container, .table-container {
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.chart-container:hover, .table-container:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--secondary-bg-dark);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--accent-blue);
+    border-radius: 5px;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 1024px) {
+    .dashboard-charts {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .chart-container {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .content {
+        margin: 1rem;
+        padding: 1rem;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .chart-container {
+        min-width: 100%;
+    }
+}
+
+/* Premium Hover Effects */
+.chart-container canvas, #enrollmentTable {
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.chart-container canvas:hover, #enrollmentTable tr:hover {
+    transform: scale(1.02);
+}
