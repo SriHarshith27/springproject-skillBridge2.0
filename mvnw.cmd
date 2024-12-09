@@ -121,16 +121,15 @@ if ($env:MVNW_USERNAME -and $env:MVNW_PASSWORD) {
 $webclient.DownloadFile($distributionUrl, "$TMP_DOWNLOAD_DIR/$distributionUrlName") | Out-Null
 
 # If specified, validate the SHA-256 sum of the Maven distribution zip file
-$distributionSha256Sum = (Get-Content -Raw "$scriptDir/.mvn/wrapper/maven-wrapper.properties" | ConvertFrom-StringData).distributionSha256Sum
-if ($distributionSha256Sum) {
-  if ($USE_MVND) {
-    Write-Error "Checksum validation is not supported for maven-mvnd. `nPlease disable validation by removing 'distributionSha256Sum' from your maven-wrapper.properties."
-  }
-  Import-Module $PSHOME\Modules\Microsoft.PowerShell.Utility -Function Get-FileHash
-  if ((Get-FileHash "$TMP_DOWNLOAD_DIR/$distributionUrlName" -Algorithm SHA256).Hash.ToLower() -ne $distributionSha256Sum) {
-    Write-Error "Error: Failed to validate Maven distribution SHA-256, your Maven distribution might be compromised. If you updated your Maven version, you need to update the specified distributionSha256Sum property."
-  }
-}
+set distributionSha256Sum=some_long_hash_value
+if defined distributionSha256Sum (
+    PowerShell -Command "^
+        Import-Module '$PSHOME\Modules\Microsoft.PowerShell.Utility' -Function Get-FileHash;^
+        if ((Get-FileHash '$TMP_DOWNLOAD_DIR/$distributionUrlName' -Algorithm SHA256).Hash.ToLower() -ne '$distributionSha256Sum') {^
+            Write-Error 'Error: Failed to validate Maven distribution SHA-256, your Maven distribution might be compromised. If you updated your Maven version, you need to update the specified distributionSha256Sum property.'; ^
+            exit 1^
+        }"
+)
 
 # unzip and move
 Expand-Archive "$TMP_DOWNLOAD_DIR/$distributionUrlName" -DestinationPath "$TMP_DOWNLOAD_DIR" | Out-Null
