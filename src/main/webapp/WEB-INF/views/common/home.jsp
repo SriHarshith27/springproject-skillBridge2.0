@@ -7,14 +7,51 @@
     <title>Learnify - Empower Your Learning</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        /* Keyframe Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.02);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes gradientFlow {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
         :root {
-            --bg-primary: #121212;
-            --bg-secondary: #1E1E1E;
-            --text-primary: #FFFFFF;
-            --text-secondary: #B0B0B0;
-            --accent-color: #4A90E2;
-            --glass-bg: rgba(255, 255, 255, 0.1);
-            --glass-border: rgba(255, 255, 255, 0.2);
+            --bg-primary: #0F1020;
+            --bg-secondary: #1A1A2E;
+            --text-primary: #E6E6E6;
+            --text-secondary: #A0A0B0;
+            --accent-color: #4E79A7;
+            --accent-secondary: #6A4C93;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
         }
 
         * {
@@ -29,6 +66,7 @@
             background-color: var(--bg-primary);
             color: var(--text-primary);
             line-height: 1.6;
+            perspective: 1000px;
         }
 
         /* Navbar Styling */
@@ -40,12 +78,22 @@
             background: var(--glass-bg);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid var(--glass-border);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            animation: fadeInUp 0.8s ease;
         }
 
         .logo h1 {
             font-size: 24px;
             font-weight: 700;
             color: var(--accent-color);
+            transition: all 0.5s ease;
+        }
+
+        .logo h1:hover {
+            transform: scale(1.1) rotate(3deg);
         }
 
         .nav-links {
@@ -61,7 +109,23 @@
             background: var(--glass-bg);
             backdrop-filter: blur(10px);
             border: 1px solid var(--glass-border);
-            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(120deg, transparent, var(--accent-color), transparent);
+            transition: all 0.5s ease;
+        }
+
+        .nav-links a:hover::before {
+            left: 100%;
         }
 
         .nav-links a:hover {
@@ -75,13 +139,18 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 50px 5%;
+            padding: 100px 5% 50px;
             background: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
+            background-size: 200% 200%;
+            animation: gradientFlow 15s ease infinite;
         }
 
         .hero-content {
             flex: 1;
             max-width: 50%;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards;
+            animation-delay: 0.5s;
         }
 
         .hero-content h1 {
@@ -99,6 +168,13 @@
             max-width: 80%;
             border-radius: 16px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: all 0.6s ease;
+            transform: rotateY(-10deg);
+        }
+
+        .hero-image img:hover {
+            transform: rotateY(0) scale(1.05);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.7);
         }
 
         /* Stats Section */
@@ -116,11 +192,12 @@
             padding: 20px;
             border-radius: 12px;
             border: 1px solid var(--glass-border);
-            transition: transform 0.3s ease;
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
         }
 
         .stat:hover {
-            transform: translateY(-10px);
+            transform: translateY(-10px) scale(1.05);
         }
 
         .stat h2 {
@@ -153,6 +230,7 @@
             padding: 20px;
             border: 1px solid var(--glass-border);
             transition: transform 0.3s ease;
+            will-change: transform;
         }
 
         .reason:hover {
@@ -163,6 +241,11 @@
             max-width: 100%;
             border-radius: 8px;
             margin-bottom: 15px;
+            transition: transform 0.5s ease;
+        }
+
+        .reason:hover img {
+            transform: rotate(5deg);
         }
 
         /* Featured Courses */
@@ -190,7 +273,8 @@
             border-radius: 12px;
             padding: 20px;
             border: 1px solid var(--glass-border);
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            will-change: transform, box-shadow;
         }
 
         .course:hover {
@@ -202,6 +286,11 @@
             max-width: 100%;
             border-radius: 8px;
             margin-bottom: 15px;
+            transition: transform 0.5s ease;
+        }
+
+        .course:hover img {
+            transform: scale(1.1);
         }
 
         /* Footer */
@@ -249,7 +338,7 @@
             <p>Join our platform to learn from the best mentors and take your skills to the next level.</p>
         </div>
         <div class="hero-image">
-            <img src="https://images.unsplash.com/photo-1516397281756-7a69c719ff09?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Learning Illustration">
+            <img src="https://tinyurl.com/36aenna3" alt="Learning Illustration">
         </div>
     </section>
 
@@ -272,12 +361,12 @@
         <h2>Why Choose Us?</h2>
         <div class="reasons">
             <div class="reason">
-                <img src="https://images.unsplash.com/photo-1616216795485-1fa3d4dcdee5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Expert Mentors">
+                <img src="https://tinyurl.com/5n7h6b9c" alt="Expert Mentors">
                 <h3>Expert Mentors</h3>
                 <p>Learn from industry-leading mentors with years of experience.</p>
             </div>
             <div class="reason">
-                <img src="https://images.unsplash.com/photo-1521790362395-9a556acc5b5b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Affordable Learning">
+                <img src="https://tinyurl.com/4bakxs3u" alt="Affordable Learning">
                 <h3>Affordable Learning</h3>
                 <p>Access premium content at the most competitive prices.</p>
             </div>
@@ -298,7 +387,7 @@
                 <p>Master backend development with Spring Boot.</p>
             </div>
             <div class="course">
-                <img src="https://images.unsplash.com/photo-1580130544977-624d0e30b923?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Python Programming">
+                <img src="https://tinyurl.com/yrzanvtw" alt="Python Programming">
                 <h3>Python Programming</h3>
                 <p>Learn Python from beginner to advanced level.</p>
             </div>
@@ -311,7 +400,7 @@
     </section>
 
     <footer>
-        <p>&copy; 2024 Learnify. All Rights Reserved.</p>
+        <p>&copy; 2024 Learnify.sriharshith27 & A Pavan & Tulasi Ram  All Rights Reserved.</p>
     </footer>
 </body>
 </html>
