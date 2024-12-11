@@ -86,7 +86,7 @@
                     isValid = false;
                 }
 
-                if (password.length < 6) {
+                if (password.length < 4) {
                     document.getElementById('passwordError').textContent = 'Password must be at least 6 characters';
                     document.getElementById('passwordError').classList.add('show');
                     isValid = false;
