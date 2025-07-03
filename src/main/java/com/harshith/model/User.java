@@ -1,14 +1,26 @@
 package com.harshith.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
-public class User {
+@Table(name = "users")
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(exclude = "enrolledCourses")
+@ToString(exclude = "enrolledCourses")
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,94 +31,54 @@ public class User {
 
     private String password;
 
-    @Email
-    @NotNull
     @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
     private String role = "USER";
 
-    @Pattern(regexp = "(^$|[0-9]{10})", message = "Invalid phone number")
     @Column(nullable = true)
     private String phone;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(
-        name = "user_courses",
-        joinColumns = @JoinColumn(name = "user_id"),
-        inverseJoinColumns = @JoinColumn(name = "course_id")
-    )
+    @ManyToMany(mappedBy = "enrolledUsers", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Course> enrolledCourses = new HashSet<>();
-    
-    
-    @Column(unique = true)
-    private String resetToken; // Add reset token field
 
-
-    public String getResetToken() {
-        return resetToken;
-    }
-
-    public void setResetToken(String resetToken) {
-        this.resetToken = resetToken;
-    }
-
-
-    // Getters and Setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
+    public User(Long id, String username, String password, String email, String role, String phone) {
         this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
         this.role = role;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
         this.phone = phone;
     }
 
-    public Set<Course> getEnrolledCourses() {
-        return enrolledCourses;
+    // --- UserDetails Methods Implementation ---
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        // Spring Security expects roles to start with "ROLE_"
+        return List.of(new SimpleGrantedAuthority("ROLE_" + this.role));
     }
 
-    public void setEnrolledCourses(Set<Course> enrolledCourses) {
-        this.enrolledCourses = enrolledCourses;
+    // Note: getUsername() is provided by Lombok's @Data
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

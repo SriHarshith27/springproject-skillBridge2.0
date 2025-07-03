@@ -1,37 +1,39 @@
 package com.harshith.service;
 
-import com.harshith.model.Assignment;
 import com.harshith.model.Course;
 import com.harshith.model.User;
-import com.harshith.repository.AssignmentRepository;
 import com.harshith.repository.UserRepository;
-import java.util.Collections;
-
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder; // Import the interface
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import java.sql.Blob;
-import java.sql.SQLException;
-
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    // This is the fix: Ask for the interface, not the specific implementation.
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private AssignmentRepository assignmentRepository;
+    @Override
+    public User registerUser(User user) {
+        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
+            throw new IllegalStateException("Username already exists.");
+        }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepository.save(user);
+    }
 
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder; 
+    @Override
+    public Optional<User> validateUser(String username, String password) {
+        return userRepository.findByUsername(username)
+                .filter(u -> passwordEncoder.matches(password, u.getPassword()));
+    }
 
     @Override
     public List<User> getAllUsers() {
@@ -39,66 +41,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getUserById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
+    }
+
+    @Override
     public void deleteUser(Long id) {
+        if (!userRepository.existsById(id)) {
+            throw new EntityNotFoundException("User not found with id: " + id);
+        }
         userRepository.deleteById(id);
     }
-    
-    
-    @Override
-    public long countByRole(String role) {
-        return userRepository.countByRole(role);
-    }
 
-    
-    
     @Override
     public User updateUser(Long id, User updatedUser) {
-        Optional<User> existingUser = userRepository.findById(id);
-        if (existingUser.isPresent()) {
-            User user = existingUser.get();
-            user.setUsername(updatedUser.getUsername());
-            user.setEmail(updatedUser.getEmail());
-            user.setPhone(updatedUser.getPhone());
-            user.setRole(updatedUser.getRole());
-            user.setPassword(updatedUser.getPassword()); // Plain password (for non-encrypted passwords)
-            return userRepository.save(user);
-        }
-        return null;
-    }
-
-    @Override
-    public Optional<User> findByUsername(String username) {
-        return userRepository.findByUsername(username).stream().findFirst();
-    }
-
-    @Override
-    public Optional<User> validateUser(String username, String password) {
-        Optional<User> user = userRepository.findByUsername(username).stream().findFirst();
-        if (user.isPresent() && passwordEncoder.matches(password, user.get().getPassword())) {
-            return user;
-        }
-        return Optional.empty();
-    }
-
-    @Override
-    public User registerUser(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        User user = getUserById(id);
+        user.setUsername(updatedUser.getUsername());
+        user.setEmail(updatedUser.getEmail());
+        user.setPhone(updatedUser.getPhone());
+        user.setRole(updatedUser.getRole());
         return userRepository.save(user);
-    }
-
-    @Override
-    public boolean isUsernameUnique(String username) {
-        return userRepository.findByUsername(username).isEmpty();
-    }
-
-    @Override
-    public Optional<User> getUserById(Long id) {
-        return userRepository.findById(id);
-    }
-
-    @Override
-    public boolean isPasswordValid(User user, String currentPassword) {
-        return passwordEncoder.matches(currentPassword, user.getPassword());
     }
 
     @Override
@@ -108,46 +71,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUser(User user) {
-        userRepository.save(user);
+    public boolean isPasswordValid(User user, String currentPassword) {
+        return passwordEncoder.matches(currentPassword, user.getPassword());
     }
 
     @Override
-    public List<Assignment> getAssignmentsByUserId(Long userId) {
-        return assignmentRepository.findBySubmittedByUserId(userId);
-    }
-
-    
-    @Override
-    public void uploadStudentAssignment(Long assignmentId, Long userId, MultipartFile answerFile) {
-        try {
-            Assignment assignment = assignmentRepository.findById(assignmentId)
-                    .orElseThrow(() -> new RuntimeException("Assignment not found"));
-
-            Blob answerBlob = new javax.sql.rowset.serial.SerialBlob(answerFile.getBytes());
-            assignment.setStudentAnswerFile(answerBlob);
-            assignment.setSubmittedByUserId(userId);
-            assignmentRepository.save(assignment);
-        } catch (SQLException | IOException e) {
-            throw new RuntimeException("Error while uploading assignment answer", e);
-        }
+    public Optional<User> findByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 
     @Override
-    public Optional<User> findByResetToken(String resetToken) {
-        return userRepository.findByResetToken(resetToken); // Implemented method
+    public long countByRole(String role) {
+        return userRepository.countByRole(role);
     }
-    
+
     @Override
     public List<Course> getEnrolledCoursesByUserId(Long userId) {
-        Optional<User> userOptional = userRepository.findById(userId);
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            return new ArrayList<>(user.getEnrolledCourses()); // Fetch enrolled courses
-        }
-        return Collections.emptyList(); // Return empty list if no courses are found
+        User user = getUserById(userId);
+        return new ArrayList<>(user.getEnrolledCourses());
     }
-
-   
-    
 }

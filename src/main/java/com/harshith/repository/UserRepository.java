@@ -1,16 +1,21 @@
 package com.harshith.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository; 
 import com.harshith.model.User;
-import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
 import java.util.Optional;
 
+@Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    List<User> findByUsername(String username);
-    long countByRole(String role);
+
+    // Changed from List<User> to Optional<User> for correctness, as username is unique.
+    Optional<User> findByUsername(String username);
+
+    // findByEmail is correct as email is also unique.
     Optional<User> findByEmail(String email);
 
-    Optional<User> findByResetToken(String resetToken);
+    long countByRole(String role);
+
+    // The findByResetToken method is no longer needed and has been removed.
 }
- 
- 
