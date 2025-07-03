@@ -8,8 +8,11 @@ import java.util.List;
 
 @Repository
 public interface AssignmentRepository extends JpaRepository<Assignment, Long> {
-    List<Assignment> findBySubmittedByUserId(Long userId);
-    List<Assignment> findByCourseIdAndStudentAnswerFileNotNull(Long courseId);
-    List<Assignment> findByCourseId(Long courseId);
 
+    List<Assignment> findBySubmittedByUserId(Long userId);
+
+    // This is the corrected method name
+    List<Assignment> findByCourseIdAndStudentAnswerFileUrlNotNull(Long courseId);
+
+    List<Assignment> findByCourseId(Long courseId);
 }

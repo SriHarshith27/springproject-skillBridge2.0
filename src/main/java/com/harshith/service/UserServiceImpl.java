@@ -4,8 +4,9 @@ import com.harshith.model.Course;
 import com.harshith.model.User;
 import com.harshith.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder; // Import the interface
+// Removed lombok.RequiredArgsConstructor
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,12 +14,16 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    // This is the fix: Ask for the interface, not the specific implementation.
     private final PasswordEncoder passwordEncoder;
+
+    // By creating our own constructor, we can apply @Lazy to the specific parameter causing the issue.
+    public UserServiceImpl(UserRepository userRepository, @Lazy PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public User registerUser(User user) {
@@ -29,6 +34,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
+    // ... The rest of the methods in your class remain unchanged.
     @Override
     public Optional<User> validateUser(String username, String password) {
         return userRepository.findByUsername(username)
