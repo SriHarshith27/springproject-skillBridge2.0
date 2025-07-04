@@ -6,7 +6,6 @@ import com.harshith.repository.UserRepository;
 import com.harshith.validation.InputValidator;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,7 +22,6 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    @Lazy
     private final PasswordEncoder passwordEncoder;
     private final InputValidator inputValidator;
     private final AuditService auditService;
