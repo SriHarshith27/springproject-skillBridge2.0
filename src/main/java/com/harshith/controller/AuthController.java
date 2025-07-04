@@ -57,7 +57,7 @@ public class AuthController {
     // --- THIS IS THE NEW ENDPOINT ---
     /**
      * Gets the details of the currently authenticated user.
-     * @param user The UserDetails object injected by Spring Security.
+     * @param userDetails The UserDetails object injected by Spring Security.
      * @return A DTO with the current user's information.
      */
     @GetMapping("/me")

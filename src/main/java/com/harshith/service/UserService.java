@@ -2,6 +2,8 @@ package com.harshith.service;
 
 import com.harshith.model.Course;
 import com.harshith.model.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -9,14 +11,16 @@ import java.util.Optional;
 public interface UserService {
 
     List<User> getAllUsers();
+    
+    Page<User> getAllUsers(Pageable pageable);
 
     User getUserById(Long id);
 
-    User updateUser(Long id, User updatedUser);
+    User updateUser(Long id, User updatedUser, User currentUser);
 
     User registerUser(User user);
 
-    void deleteUser(Long id);
+    void deleteUser(Long id, User currentUser);
 
     Optional<User> findByUsername(String username);
 

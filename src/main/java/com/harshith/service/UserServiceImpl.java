@@ -92,6 +92,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    @Override
     public Page<User> getAllUsers(Pageable pageable) {
         return userRepository.findByDeletedFalse(pageable);
     }

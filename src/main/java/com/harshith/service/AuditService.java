@@ -65,6 +65,23 @@ public class AuditService {
         createAuditLog(userId, "USER_LOGOUT", "User logged out", null);
     }
 
+    // Add missing methods
+    public void logUserRegistration(Long userId) {
+        createAuditLog(userId, "USER_REGISTERED", "User registered with ID: " + userId, null);
+    }
+
+    public void logFailedLogin(Long userId, String reason) {
+        createAuditLog(userId, "LOGIN_FAILED", "Login failed: " + reason, null);
+    }
+
+    public void logUserUpdate(Long currentUserId, Long updatedUserId) {
+        createAuditLog(currentUserId, "USER_UPDATED", "User updated with ID: " + updatedUserId, null);
+    }
+
+    public void logPasswordChange(Long userId) {
+        createAuditLog(userId, "PASSWORD_CHANGED", "Password changed for user ID: " + userId, null);
+    }
+
     private void createAuditLog(Long userId, String action, String details, Long entityId) {
         try {
             AuditLog auditLog = new AuditLog();
