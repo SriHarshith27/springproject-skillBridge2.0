@@ -16,22 +16,30 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class FileStorageService {
 
-    private final Cloudinary cloudinary;
     private final FileUploadValidator fileValidator;
+    
+    @Value("${cloudinary.cloud_name}")
+    private String cloudName;
+    
+    @Value("${cloudinary.api_key}")
+    private String apiKey;
+    
+    @Value("${cloudinary.api_secret}")
+    private String apiSecret;
+    
+    private Cloudinary cloudinary;
 
-    public FileStorageService(
-            @Value("${cloudinary.cloud_name}") String cloudName,
-            @Value("${cloudinary.api_key}") String apiKey,
-            @Value("${cloudinary.api_secret}") String apiSecret,
-            FileUploadValidator fileValidator
-    ) {
-        this.fileValidator = fileValidator;
-        this.cloudinary = new Cloudinary(ObjectUtils.asMap(
-                "cloud_name", cloudName,
-                "api_key", apiKey,
-                "api_secret", apiSecret,
-                "secure", true
-        ));
+    // Initialize Cloudinary after dependency injection
+    private Cloudinary getCloudinary() {
+        if (cloudinary == null) {
+            cloudinary = new Cloudinary(ObjectUtils.asMap(
+                    "cloud_name", cloudName,
+                    "api_key", apiKey,
+                    "api_secret", apiSecret,
+                    "secure", true
+            ));
+        }
+        return cloudinary;
     }
 
     public String uploadVideoFile(MultipartFile file) {
@@ -69,7 +77,7 @@ public class FileStorageService {
                 uploadParams.put("fetch_format", "auto");
             }
 
-            Map<?, ?> uploadResult = cloudinary.uploader().upload(file.getBytes(), uploadParams);
+            Map<?, ?> uploadResult = getCloudinary().uploader().upload(file.getBytes(), uploadParams);
             return (String) uploadResult.get("secure_url");
 
         } catch (IOException e) {
