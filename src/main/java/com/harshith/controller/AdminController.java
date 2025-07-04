@@ -2,11 +2,13 @@ package com.harshith.controller;
 
 import com.harshith.dto.ApiResponse;
 import com.harshith.dto.UserDto;
+import com.harshith.model.User;
 import com.harshith.service.DtoMapperService;
 import com.harshith.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,8 +32,10 @@ public class AdminController {
     }
 
     @DeleteMapping("/users/{id}")
-    public ResponseEntity<ApiResponse> deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
+    public ResponseEntity<ApiResponse> deleteUser(
+            @PathVariable Long id, 
+            @AuthenticationPrincipal User currentUser) {
+        userService.deleteUser(id, currentUser);
         return ResponseEntity.ok(new ApiResponse("User deleted successfully."));
     }
 }
