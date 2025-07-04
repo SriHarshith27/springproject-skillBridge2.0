@@ -6,17 +6,21 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-// For user registration
 @Data
 public class RegisterRequest {
     @NotBlank
     private String username;
+
     @NotBlank
     private String password;
+
     @NotBlank
     @Email
     private String email;
+
     private String phone;
+
+    // --- THIS IS THE FIX ---
     @NotNull
-    private String role;
+    private Role role;
 }

@@ -18,7 +18,12 @@ public class DtoMapperService {
         dto.setUsername(user.getUsername());
         dto.setEmail(user.getEmail());
         dto.setPhone(user.getPhone());
-        dto.setRole(user.getRole());
+
+        // THIS IS THE FIX: Convert the Role enum to a String using .name()
+        if (user.getRole() != null) {
+            dto.setRole(user.getRole().name());
+        }
+
         return dto;
     }
 
@@ -32,7 +37,6 @@ public class DtoMapperService {
         dto.setDescription(course.getDescription());
         dto.setCategory(course.getCategory());
         dto.setDuration(course.getDuration());
-        // Convert the mentor User entity to a UserDto to avoid exposing password
         dto.setMentor(toUserDto(course.getMentor()));
         return dto;
     }

@@ -1,6 +1,7 @@
 package com.harshith.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,7 @@ import java.util.Set;
 @Table(name = "users")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor // Using Lombok's @AllArgsConstructor is cleaner and safer
 @EqualsAndHashCode(exclude = "enrolledCourses")
 @ToString(exclude = "enrolledCourses")
 public class User implements UserDetails {
@@ -34,8 +36,9 @@ public class User implements UserDetails {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String role = "USER";
+    private Role role;
 
     @Column(nullable = true)
     private String phone;
@@ -43,24 +46,13 @@ public class User implements UserDetails {
     @ManyToMany(mappedBy = "enrolledUsers", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Course> enrolledCourses = new HashSet<>();
 
-    public User(Long id, String username, String password, String email, String role, String phone) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.role = role;
-        this.phone = phone;
-    }
-
     // --- UserDetails Methods Implementation ---
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Spring Security expects roles to start with "ROLE_"
-        return List.of(new SimpleGrantedAuthority("ROLE_" + this.role));
+        // CORRECTED: Use .name() to get the string value of the enum for the authority
+        return List.of(new SimpleGrantedAuthority("ROLE_" + this.role.name()));
     }
-
-    // Note: getUsername() is provided by Lombok's @Data
 
     @Override
     public boolean isAccountNonExpired() {
