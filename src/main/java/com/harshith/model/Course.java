@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -16,23 +17,24 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"enrolledUsers", "modules", "assignments"}) // Exclude collections to prevent infinite loops
-@ToString(exclude = {"enrolledUsers", "modules", "assignments"}) // Exclude collections for cleaner logging
+@EqualsAndHashCode(exclude = {"enrolledUsers", "modules", "assignments"})
+@ToString(exclude = {"enrolledUsers", "modules", "assignments"})
 public class Course {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 200)
     private String name;
 
-    @Column(length = 1000)
+    @Column(length = 2000)
     private String description;
 
+    @Column(nullable = false)
     private int duration;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String category;
 
     @ManyToMany
@@ -52,4 +54,33 @@ public class Course {
     @ManyToOne
     @JoinColumn(name = "mentor_id", nullable = false)
     private User mentor;
+
+    // Soft delete fields
+    @Column(name = "deleted", nullable = false)
+    private boolean deleted = false;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
+    @Column(name = "deleted_by")
+    private Long deletedBy;
+
+    // Audit fields
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    public void prePersist() {
+        LocalDateTime now = LocalDateTime.now();
+        createdAt = now;
+        updatedAt = now;
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
 }
