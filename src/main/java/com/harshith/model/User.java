@@ -45,7 +45,6 @@ public class User implements UserDetails {
 
     @Column(nullable = false, unique = true, length = 100)
     @NotBlank(message = "Email is required")
-    @Email(message = "Invalid email format")
     private String email;
 
     @Enumerated(EnumType.STRING)
