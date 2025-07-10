@@ -1,6 +1,6 @@
 package com.harshith.config;
 
-import com.harshith.service.UserService;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,11 +25,7 @@ public class ApplicationConfig {
         return new BCryptPasswordEncoder(12); // Stronger hashing
     }
 
-    @Bean
-    public UserDetailsService userDetailsService(UserService userService) {
-        return username -> userService.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
-    }
+
 
     @Bean
     public AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {

@@ -6,12 +6,14 @@ import com.harshith.repository.UserRepository;
 import com.harshith.validation.InputValidator;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.core.userdetails.UserDetails; // <-- Import this
+
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -23,7 +25,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    @Lazy
+
     private final PasswordEncoder passwordEncoder;
     private final InputValidator inputValidator;
     private final AuditService auditService;
@@ -63,7 +65,11 @@ public class UserServiceImpl implements UserService {
         
         return savedUser;
     }
-
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
+    }
     @Override
     @Transactional
     public Optional<User> validateUser(String username, String password) {

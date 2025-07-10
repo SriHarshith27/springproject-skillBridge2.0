@@ -1,4 +1,6 @@
 package com.harshith.validation;
+import org.owasp.html.Sanitizers;
+import org.owasp.html.PolicyFactory;
 
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -7,6 +9,10 @@ import java.util.regex.Pattern;
 
 @Component
 public class InputValidator {
+
+
+    private static final PolicyFactory POLICY_FACTORY = Sanitizers.FORMATTING.and(Sanitizers.LINKS);
+
 
     private static final Pattern EMAIL_PATTERN = Pattern.compile(
         "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
@@ -36,6 +42,13 @@ public class InputValidator {
         }
     }
 
+    public String sanitizeInput(String input) {
+        if (input == null) return null;
+
+        // Use the OWASP sanitizer to clean the input
+        return POLICY_FACTORY.sanitize(input).trim();
+    }
+
     public void validateUsername(String username) {
         if (!StringUtils.hasText(username)) {
             throw new IllegalArgumentException("Username cannot be empty");
@@ -63,13 +76,7 @@ public class InputValidator {
         }
     }
 
-    public String sanitizeInput(String input) {
-        if (input == null) return null;
-        
-        // Remove potential XSS characters
-        return input.replaceAll("[<>\"'&]", "")
-                   .trim();
-    }
+
 
     public void validateCourseTitle(String title) {
         if (!StringUtils.hasText(title)) {
