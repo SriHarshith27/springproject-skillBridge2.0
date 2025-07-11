@@ -33,10 +33,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 // Enable CSRF for form-based endpoints, disable for API endpoints
-                .csrf(csrf -> csrf
-                    .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                    .ignoringRequestMatchers("/api/**") // Only disable for API endpoints
-                )
+                .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
                         // Allow preflight OPTIONS requests
@@ -44,9 +41,12 @@ public class SecurityConfig {
                         
                         // Public endpoints
                         .requestMatchers("/api/v1/auth/login", "/api/v1/auth/register").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/courses/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/courses", "/api/v1/courses/{id}").permitAll()
                         .requestMatchers("/", "/home", "/error").permitAll()
-                        
+
+                        .requestMatchers("/api/v1/courses/{id}/submissions").hasAuthority("ROLE_MENTOR")
+
+
                         // All other requests must be authenticated
                         .anyRequest().authenticated()
                 )

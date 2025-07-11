@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.HashMap; // Import HashMap
 import java.util.Map;
 import java.util.UUID;
 
@@ -17,19 +18,18 @@ import java.util.UUID;
 public class FileStorageService {
 
     private final FileUploadValidator fileValidator;
-    
+
     @Value("${cloudinary.cloud_name}")
     private String cloudName;
-    
+
     @Value("${cloudinary.api_key}")
     private String apiKey;
-    
+
     @Value("${cloudinary.api_secret}")
     private String apiSecret;
-    
+
     private Cloudinary cloudinary;
 
-    // Initialize Cloudinary after dependency injection
     private Cloudinary getCloudinary() {
         if (cloudinary == null) {
             cloudinary = new Cloudinary(ObjectUtils.asMap(
@@ -46,12 +46,12 @@ public class FileStorageService {
         fileValidator.validateVideoFile(file);
         return uploadToCloudinary(file, "video");
     }
-    
+
     public String uploadDocumentFile(MultipartFile file) {
         fileValidator.validateDocumentFile(file);
         return uploadToCloudinary(file, "raw");
     }
-    
+
     public String uploadImageFile(MultipartFile file) {
         fileValidator.validateImageFile(file);
         return uploadToCloudinary(file, "image");
@@ -59,22 +59,22 @@ public class FileStorageService {
 
     private String uploadToCloudinary(MultipartFile file, String resourceType) {
         try {
-            // Generate unique filename to prevent conflicts
             String originalFilename = file.getOriginalFilename();
             String sanitizedFilename = fileValidator.sanitizeFilename(originalFilename);
             String uniqueFilename = UUID.randomUUID().toString() + "_" + sanitizedFilename;
 
-            Map<String, Object> uploadParams = ObjectUtils.asMap(
-                    "resource_type", resourceType,
-                    "public_id", uniqueFilename,
-                    "use_filename", false,
-                    "unique_filename", true
-            );
+            // Use a mutable map to add conditional parameters
+            Map<String, Object> uploadParams = new HashMap<>();
+            uploadParams.put("resource_type", resourceType);
+            uploadParams.put("public_id", uniqueFilename);
+            uploadParams.put("use_filename", false);
+            uploadParams.put("unique_filename", true);
 
-            // Add additional security for videos
-            if ("video".equals(resourceType)) {
-                uploadParams.put("quality", "auto");
-                uploadParams.put("fetch_format", "auto");
+            // --- THE FIX ---
+            // For raw files like assignments, explicitly set the access type to public.
+            // This makes the returned URL directly downloadable by anyone with the link.
+            if ("raw".equals(resourceType)) {
+                uploadParams.put("access_mode", "public");
             }
 
             Map<?, ?> uploadResult = getCloudinary().uploader().upload(file.getBytes(), uploadParams);
@@ -85,7 +85,7 @@ public class FileStorageService {
         }
     }
 
-    // Legacy method for backward compatibility
+    // This legacy method is fine as is
     public String uploadFile(MultipartFile file) {
         String contentType = file.getContentType();
         if (contentType != null) {
@@ -97,6 +97,6 @@ public class FileStorageService {
                 return uploadDocumentFile(file);
             }
         }
-        return uploadDocumentFile(file); // Default fallback
+        return uploadDocumentFile(file);
     }
 }

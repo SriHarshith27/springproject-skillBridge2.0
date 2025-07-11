@@ -1,6 +1,7 @@
 package com.harshith.service;
 
 import com.harshith.dto.CourseRequest; // Import the DTO
+import com.harshith.dto.SubmissionDto;
 import com.harshith.model.Course;
 import com.harshith.model.CourseModule;
 import com.harshith.model.User; // Import the User model
@@ -28,9 +29,18 @@ public interface CourseService {
     void deEnrollStudentFromCourse(Long studentId, Long courseId);
     List<Map<String, Object>> getEnrollmentStats();
 
+
+    //course-deletion
+
+    void deleteModule(Long moduleId, User currentUser);
+    void deleteAssignment(Long assignmentId, User currentUser);
+
     // --- Module & Assignment Management ---
     void addModuleToCourse(Long courseId, String moduleTitle, MultipartFile videoFile, int duration, User currentUser);
     void addAssignmentToCourse(Long courseId, String assignmentTitle, MultipartFile assignmentFile, User currentUser);
     void uploadStudentAssignment(Long assignmentId, Long userId, MultipartFile answerFile);
     void gradeAssignment(Long assignmentId, int grade, User currentUser); // New method
+
+    List<SubmissionDto> getSubmissionsForCourse(Long courseId, User currentUser);
+
 }

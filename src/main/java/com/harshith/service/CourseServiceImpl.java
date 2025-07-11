@@ -1,6 +1,7 @@
 package com.harshith.service;
 
 import com.harshith.dto.CourseRequest;
+import com.harshith.dto.SubmissionDto;
 import com.harshith.model.Assignment;
 import com.harshith.model.Course;
 import com.harshith.model.CourseModule;
@@ -21,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -264,5 +266,66 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public List<Course> searchCoursesByName(String keyword) {
         return courseRepository.findByNameContainingIgnoreCase(keyword);
+    }
+
+
+
+    @Override
+    @Transactional
+    public void deleteModule(Long moduleId, User currentUser) {
+        CourseModule module = courseModuleRepository.findById(moduleId)
+                .orElseThrow(() -> new EntityNotFoundException("Module not found with id: " + moduleId));
+
+        if (!module.getCourse().getMentor().getId().equals(currentUser.getId())) {
+            throw new AccessDeniedException("You are not authorized to delete this module.");
+        }
+
+        // Use the new, more direct deletion method
+        courseModuleRepository.deleteByIdAndFlush(moduleId);
+    }
+
+    // --- REPLACE the old deleteAssignment method with this ---
+    @Override
+    @Transactional
+    public void deleteAssignment(Long assignmentId, User currentUser) {
+        Assignment assignment = assignmentRepository.findById(assignmentId)
+                .orElseThrow(() -> new EntityNotFoundException("Assignment not found with id: " + assignmentId));
+
+        if (!assignment.getCourse().getMentor().getId().equals(currentUser.getId())) {
+            throw new AccessDeniedException("You are not authorized to delete this assignment.");
+        }
+
+        // Use the new, more direct deletion method
+        assignmentRepository.deleteByIdAndFlush(assignmentId);
+    }
+
+
+    @Override
+    public List<SubmissionDto> getSubmissionsForCourse(Long courseId, User currentUser) {
+        Course course = getCourseById(courseId);
+
+        // Authorization check: Only the course mentor can view submissions
+        if (!course.getMentor().getId().equals(currentUser.getId())) {
+            throw new AccessDeniedException("You are not authorized to view submissions for this course.");
+        }
+
+        // Find all assignments for the course that have a student answer submitted
+        List<Assignment> submittedAssignments = assignmentRepository.findByCourseIdAndStudentAnswerFileUrlNotNull(courseId);
+
+        // Map the results to our new DTO
+        return submittedAssignments.stream().map(assignment -> {
+            // Find the student who submitted the assignment
+            User student = userRepository.findById(assignment.getSubmittedByUserId())
+                    .orElse(null); // Handle case where student might not be found
+
+            return new SubmissionDto(
+                    assignment.getId(),
+                    assignment.getTitle(),
+                    student != null ? student.getId() : null,
+                    student != null ? student.getUsername() : "Unknown Student",
+                    assignment.getStudentAnswerFileUrl(),
+                    assignment.getGrade()
+            );
+        }).collect(Collectors.toList());
     }
 }

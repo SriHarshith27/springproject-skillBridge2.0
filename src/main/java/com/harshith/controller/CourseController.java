@@ -3,6 +3,7 @@ package com.harshith.controller;
 import com.harshith.dto.ApiResponse;
 import com.harshith.dto.CourseDto;
 import com.harshith.dto.CourseRequest;
+import com.harshith.dto.SubmissionDto;
 import com.harshith.model.Course;
 import com.harshith.model.User;
 import com.harshith.service.CourseService;
@@ -191,4 +192,31 @@ public class CourseController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ApiResponse(e.getMessage()));
         }
     }
+
+
+    @DeleteMapping("/modules/{moduleId}")
+    @PreAuthorize("hasRole('MENTOR')")
+    public ResponseEntity<ApiResponse> deleteModule(
+            @PathVariable Long moduleId,
+            @AuthenticationPrincipal User currentUser) {
+        courseService.deleteModule(moduleId, currentUser);
+        return ResponseEntity.ok(new ApiResponse("Module deleted successfully."));
+    }
+
+    @DeleteMapping("/assignments/{assignmentId}")
+    @PreAuthorize("hasRole('MENTOR')")
+    public ResponseEntity<ApiResponse> deleteAssignment(
+            @PathVariable Long assignmentId,
+            @AuthenticationPrincipal User currentUser) {
+        courseService.deleteAssignment(assignmentId, currentUser);
+        return ResponseEntity.ok(new ApiResponse("Assignment deleted successfully."));
+    }
+
+    @GetMapping("/{courseId}/submissions")
+    @PreAuthorize("hasAuthority('ROLE_MENTOR')")
+    public ResponseEntity<List<SubmissionDto>> getSubmissions(@PathVariable Long courseId, @AuthenticationPrincipal User currentUser) {
+        List<SubmissionDto> submissions = courseService.getSubmissionsForCourse(courseId, currentUser);
+        return ResponseEntity.ok(submissions);
+    }
+
 }
